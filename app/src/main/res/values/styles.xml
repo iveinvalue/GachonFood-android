@@ -17,11 +17,11 @@
     </style>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorAccent">#cc6666</item>
-        <item name="colorPrimary">#d78100 </item>
-        <item name="colorPrimaryDark">#b36b00</item>
-        <item name="colorControlHighlight">#cc6666</item>
-        <item name="colorControlNormal">#cc6666</item>
+        <item name="colorAccent">#E1706D</item>
+        <item name="colorPrimary">#5F94DA</item>
+        <item name="colorPrimaryDark">#4D86D3</item>
+        <item name="colorControlHighlight">#E1706D</item>
+        <item name="colorControlNormal">#E1706D</item>
     </style>
 
 </resources>
