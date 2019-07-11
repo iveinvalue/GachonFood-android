@@ -1,8 +1,11 @@
 package com.jungcode.gachonfood.gachonfood;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -14,27 +17,23 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
-import android.support.design.internal.NavigationMenu;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.tsengvn.typekit.Typekit;
-import com.tsengvn.typekit.TypekitContextWrapper;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import es.dmoral.toasty.Toasty;
 import io.github.yavski.fabspeeddial.FabSpeedDial;
@@ -43,28 +42,13 @@ import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
-    String parse,parse2,parse3,parse4;
-    String[] str = {"월","화","수","목","금","토","일"};
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link android.support.v4.app.FragmentPagerAdapter} derivative, which
-     * will keep every loaded fragment in memory. If this becomes too memory
-     * intensive, it may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
+    String parse, parse2, parse3, parse4;
+    String[] str = {"월", "화", "수", "목", "금", "토", "일"};
+
     SectionsPagerAdapter mSectionsPagerAdapter;
     final Handler mHandler = new Handler();
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     ViewPager mViewPager;
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,32 +58,34 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportActionBar().setElevation(0);
 
-        Typekit.getInstance()
-                .addNormal(Typekit.createFromAsset(this, "fonts/NanumSquareR.otf"))
-                .addBold(Typekit.createFromAsset(this, "fonts/NanumSquareB.otf"));
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
-        FabSpeedDial fabSpeedDial = (FabSpeedDial) findViewById(R.id.fabb);
+        FabSpeedDial fabSpeedDial = findViewById(R.id.fabb);
         fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
             @Override
             public boolean onMenuItemSelected(MenuItem menuItem) {
                 int id = menuItem.getItemId();
-                if(id == R.id.appinfo){
-                    Intent intent = new Intent(MainActivity.this, Start.class);
-                    startActivity(intent);
-
+                if (id == R.id.appinfo) {
+                    new MaterialDialog.Builder(MainActivity.this)
+                            .title("버전")
+                            .content(BuildConfig.VERSION_NAME)
+                            .positiveText("확인")
+                            .show();
                 }
-                if(id == R.id.github){
+                if (id == R.id.github) {
                     new MaterialDialog.Builder(MainActivity.this)
                             .title("오픈소스 라이브러리")
                             .content("com.baoyz.pullrefreshlayout:library:1.2.0\n" +
                                     "io.github.yavski:fab-speed-dial:1.0.6\n" +
                                     "com.afollestad.material-dialogs:commons:0.9.1.0\n" +
-                                    "com.tsengvn:Typekit:1.0.0\n" +
                                     "com.github.GrenderG:Toasty:1.2.5")
                             .positiveText("확인")
                             .show();
                 }
-                if(id == R.id.message){
+                if (id == R.id.message) {
                     new MaterialDialog.Builder(MainActivity.this)
                             .autoDismiss(false)
                             .title("개발자에게 메시지 보내기")
@@ -112,12 +98,15 @@ public class MainActivity extends AppCompatActivity {
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            posthttp2(temp);
-
+                                            posthttp(temp);
+                                            mHandler.post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Toasty.success(getApplicationContext(), "전송 성공!", Toast.LENGTH_SHORT, true).show();
+                                                }
+                                            });
                                         }
                                     }).start();
-
-
                                     dialog.dismiss();
                                 }
                             }).show();
@@ -126,10 +115,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if(android.os.Build.VERSION.SDK_INT > 9) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(
                 getApplicationContext(), getSupportFragmentManager());
@@ -137,14 +122,14 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(1);
 
-        try{
+        try {
             Calendar cal = Calendar.getInstance();
             String strWeek = null;
             int nWeek = cal.get(Calendar.DAY_OF_WEEK);
-            if(nWeek == 1)
+            if (nWeek == 1)
                 nWeek = 8;
             mViewPager.setCurrentItem(nWeek - 2);
-        }catch(Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -153,10 +138,10 @@ public class MainActivity extends AppCompatActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    posthttp3("http://www.gachon.ac.kr/etc/food.jsp?gubun=A");
-                    posthttp4("http://www.gachon.ac.kr/etc/food.jsp?gubun=B");
-                    posthttp5("http://www.gachon.ac.kr/etc/food.jsp?gubun=C");
-                    posthttp6("http://ace.gachon.ac.kr/dormitory/reference/menu");
+                    parse = posthttp("http://www.gachon.ac.kr/etc/food.jsp?gubun=A");
+                    parse2 = posthttp("http://www.gachon.ac.kr/etc/food.jsp?gubun=B");
+                    parse3 = posthttp("http://www.gachon.ac.kr/etc/food.jsp?gubun=C");
+                    parse4 = posthttp("http://ace.gachon.ac.kr/dormitory/reference/menu");
                     SharedPreferences mPref = getSharedPreferences("mPref", 0);
                     SharedPreferences.Editor mPrefEdit = mPref.edit();
                     mPrefEdit.putString("parse1", parse);
@@ -165,10 +150,16 @@ public class MainActivity extends AppCompatActivity {
                     mPrefEdit.putString("parse4", parse4);
                     mPrefEdit.commit();
 
-                    String[] str_temp = parse4.split("<th class=\"");
-                    for(int i = 0;i<7;i++){
-                        str[i] = str_temp[i + 1].split("</th>")[0].split("\">")[1];
+                    Log.d("asdf", "asdf" + parse4);
+                    try {
+                        String[] str_temp = parse4.split("<th class=\"");
+                        for (int i = 0; i < 7; i++) {
+                            str[i] = str_temp[i + 1].split("</th>")[0].split("\">")[1];
+                        }
+                    } catch (Exception e) {
+
                     }
+
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -178,22 +169,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }).start();
         } else {
-            /*
-            SharedPreferences mPref = getSharedPreferences("mPref", 0);
-            SharedPreferences.Editor mPrefEdit = mPref.edit();
-            mPrefEdit.putString("parse1", "");
-            mPrefEdit.putString("parse2", "");
-            mPrefEdit.putString("parse3", "");
-            mPrefEdit.putString("parse4", "");
-            mPrefEdit.commit();*/
-
             Toasty.warning(getApplicationContext(), "인터넷 연결에 실패했습니다. 저장된 학식을 불러옵니다.", Toast.LENGTH_LONG, true).show();
-
             mViewPager.getAdapter().notifyDataSetChanged();
         }
-
-
-
 
     }
 
@@ -208,10 +186,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
         Context mContext;
 
@@ -222,24 +196,21 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a DummySectionFragment (defined as a static inner class
-            // below) with the page number as its lone argument.
             switch (position) {
                 case 0:
-                    return new activity_tabs1(mContext,"월");
+                    return new activity_tabs(mContext, "월");
                 case 1:
-                    return new activity_tabs1(mContext,"화");
+                    return new activity_tabs(mContext, "화");
                 case 2:
-                    return new activity_tabs1(mContext,"수");
+                    return new activity_tabs(mContext, "수");
                 case 3:
-                    return new activity_tabs1(mContext,"목");
+                    return new activity_tabs(mContext, "목");
                 case 4:
-                    return new activity_tabs1(mContext,"금");
+                    return new activity_tabs(mContext, "금");
                 case 5:
-                    return new activity_tabs1(mContext,"토");
+                    return new activity_tabs(mContext, "토");
                 case 6:
-                    return new activity_tabs1(mContext,"일");
+                    return new activity_tabs(mContext, "일");
             }
             return null;
         }
@@ -272,102 +243,28 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
-    public void posthttp2(String sstr1) {
-        try {
-            HttpClient client = new DefaultHttpClient();
-            HttpGet post = new HttpGet();
-            post.setURI(new URI(sstr1));
-            HttpResponse resp = client.execute(post);
-            BufferedReader br = new BufferedReader(new InputStreamReader(resp.getEntity().getContent(),"euc-kr"));
-            String str = null;
-            StringBuilder sb = new StringBuilder();
-            while ((str = br.readLine()) != null) {
-                sb.append(str).append("\n");
-            }
-            br.close();
-            //parse = sb.toString();
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    Toasty.success(getApplicationContext(), "전송 성공!", Toast.LENGTH_SHORT, true).show();
-                }
-            });
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public String posthttp(String str) {
+        try {
+            URL httpURL = new URL(str);
+            HttpURLConnection conn = (HttpURLConnection) httpURL.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setInstanceFollowRedirects(true);
+            InputStream is = conn.getInputStream(); //input스트림 개방
+            StringBuilder builder = new StringBuilder(); //문자열을 담기 위한 객체
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8")); //문자열 셋 세팅
+            String line;
 
-    }
-    public void posthttp3(String sstr1) {
-        try {
-            HttpClient client = new DefaultHttpClient();
-            HttpGet post = new HttpGet();
-            post.setURI(new URI(sstr1));
-            HttpResponse resp = client.execute(post);
-            BufferedReader br = new BufferedReader(new InputStreamReader(resp.getEntity().getContent(),"utf8"));
-            String str = null;
-            StringBuilder sb = new StringBuilder();
-            while ((str = br.readLine()) != null) {
-                sb.append(str).append("\n");
+            while ((line = reader.readLine()) != null) {
+                builder.append(line + "\n");
             }
-            br.close();
-            parse = sb.toString();
+
+            String result = builder.toString();
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return "";
     }
-    public void posthttp4(String sstr1) {
-        try {
-            HttpClient client = new DefaultHttpClient();
-            HttpGet post = new HttpGet();
-            post.setURI(new URI(sstr1));
-            HttpResponse resp = client.execute(post);
-            BufferedReader br = new BufferedReader(new InputStreamReader(resp.getEntity().getContent(),"utf8"));
-            String str = null;
-            StringBuilder sb = new StringBuilder();
-            while ((str = br.readLine()) != null) {
-                sb.append(str).append("\n");
-            }
-            br.close();
-            parse2 = sb.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    public void posthttp5(String sstr1) {
-        try {
-            HttpClient client = new DefaultHttpClient();
-            HttpGet post = new HttpGet();
-            post.setURI(new URI(sstr1));
-            HttpResponse resp = client.execute(post);
-            BufferedReader br = new BufferedReader(new InputStreamReader(resp.getEntity().getContent(),"utf8"));
-            String str = null;
-            StringBuilder sb = new StringBuilder();
-            while ((str = br.readLine()) != null) {
-                sb.append(str).append("\n");
-            }
-            br.close();
-            parse3 = sb.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    public void posthttp6(String sstr1) {
-        try {
-            HttpClient client = new DefaultHttpClient();
-            HttpGet post = new HttpGet();
-            post.setURI(new URI(sstr1));
-            HttpResponse resp = client.execute(post);
-            BufferedReader br = new BufferedReader(new InputStreamReader(resp.getEntity().getContent(),"utf8"));
-            String str = null;
-            StringBuilder sb = new StringBuilder();
-            while ((str = br.readLine()) != null) {
-                sb.append(str).append("\n");
-            }
-            br.close();
-            parse4 = sb.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
 }

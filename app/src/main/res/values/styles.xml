@@ -1,20 +1,6 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme3" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorAccent">#ff8a65</item>
-        <item name="colorPrimary">#ff8a65 </item>
-        <item name="colorPrimaryDark">#e77f5e</item>
-        <item name="colorControlHighlight">#ff8a65</item>
-        <item name="colorControlNormal">#FF0000</item>
-    </style>
-    <style name="AppTheme2" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorAccent">#009688</item>
-        <item name="colorPrimary">#009688 </item>
-        <item name="colorPrimaryDark">#00796B</item>
-        <item name="colorControlHighlight">#00CC55</item>
-        <item name="colorControlNormal">#FF0000</item>
-    </style>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorAccent">#E1706D</item>

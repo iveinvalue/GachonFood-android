@@ -2,85 +2,69 @@ package com.jungcode.gachonfood.gachonfood;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
-import android.support.annotation.BoolRes;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
+
+import androidx.annotation.BoolRes;
+import androidx.fragment.app.Fragment;
+import androidx.cardview.widget.CardView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.baoyz.widget.PullRefreshLayout;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URI;
-
 @SuppressLint("ValidFragment")
-public class activity_tabs1 extends Fragment {
+public class activity_tabs extends Fragment {
     Context mContext;
-    String parse1, parse2,parse3 ,parse4 ;
-    String[] first,first2,total,total2,second,second2;
-    TextView food1,food2,food3,food4,food5,food6,food1_2,food1_3,food3_2,food3_3,food5_2,food5_3,food1q,food1_2q,food1_3q;
+    String parse1, parse2, parse3, parse4;
+    String[] first, first2, total, total2;
+    TextView food1, food3, food5, food1_2, food1_3, food3_2, food3_3, food5_2, food5_3, food1q, food1_2q, food1_3q;
     SharedPreferences mPref;
-    String _1,_2,_3;
+    String _1, _2, _3;
     String when_ = "";
-    Boolean[] check = {true,true,true,true};
+    Boolean[] check = {true, true, true, true};
     int is_first = 1;
 
-    public activity_tabs1(Context context,String when) {
+    public activity_tabs(Context context, String when) {
         mContext = context;
         when_ = when;
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser)
-    {
+    public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser)
-        {
-            if(is_first == 0){
-                for(int i =0;i<4;i++){
-                    try{
-                        if(mPref.getString("check" + String.valueOf(i), "").contains("0"))
-                            check[i] =  false;
-                        else if(mPref.getString("check" + String.valueOf(i), "").contains("1"))
-                            check[i] =  true;
+        if (isVisibleToUser) {
+            if (is_first == 0) {
+                for (int i = 0; i < 4; i++) {
+                    try {
+                        if (mPref.getString("check" + String.valueOf(i), "").contains("0"))
+                            check[i] = false;
+                        else if (mPref.getString("check" + String.valueOf(i), "").contains("1"))
+                            check[i] = true;
                         else
-                            check[i] =  true;
-                    }catch(Exception e){
-                        check[i] =  true;
+                            check[i] = true;
+                    } catch (Exception e) {
+                        check[i] = true;
                         //Toast.makeText(getActivity(),"sdsd", Toast.LENGTH_LONG).show();
                     }
 
-                    if(check[i] == true){
-                        yeah(i,0,getView());
-                    }else if(check[i] == false){
-                        yeah(i,1,getView());
+                    if (check[i] == true) {
+                        yeah(i, 0, getView());
+                    } else if (check[i] == false) {
+                        yeah(i, 1, getView());
                     }
-
                 }
             }
             is_first = 0;
             //getFragmentManager().beginTransaction().detach(this).attach(this).commit();
-        }
-        else
-        {
+        } else {
             //preload 될때(전페이지에 있을때)
         }
     }
@@ -88,97 +72,97 @@ public class activity_tabs1 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.activity_activity_tabs1, null);
+        final View view = inflater.inflate(R.layout.activity_tabs, null);
 
-        if(android.os.Build.VERSION.SDK_INT > 9) {
+        if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
 
         mPref = this.getActivity().getSharedPreferences("mPref", 0);
 
-        food1 = (TextView)view.findViewById(R.id.content);
-        food1_2 = (TextView)view.findViewById(R.id.content2);
-        food1_3 = (TextView)view.findViewById(R.id.content3);
-        food1q = (TextView)view.findViewById(R.id.contentq);
-        food1_2q = (TextView)view.findViewById(R.id.content2q);
-        food1_3q = (TextView)view.findViewById(R.id.content3q);
-        food3 = (TextView)view.findViewById(R.id.contenta);
-        food3_2 = (TextView)view.findViewById(R.id.contenta2);
-        food3_3 = (TextView)view.findViewById(R.id.contenta3);
-        food5 = (TextView)view.findViewById(R.id.contentab);
-        food5_2 = (TextView)view.findViewById(R.id.contentab2);
-        food5_3 = (TextView)view.findViewById(R.id.contentab3);
+        food1 = view.findViewById(R.id.content);
+        food1_2 = view.findViewById(R.id.content2);
+        food1_3 = view.findViewById(R.id.content3);
+        food1q = view.findViewById(R.id.contentq);
+        food1_2q = view.findViewById(R.id.content2q);
+        food1_3q = view.findViewById(R.id.content3q);
+        food3 = view.findViewById(R.id.contenta);
+        food3_2 = view.findViewById(R.id.contenta2);
+        food3_3 = view.findViewById(R.id.contenta3);
+        food5 = view.findViewById(R.id.contentab);
+        food5_2 = view.findViewById(R.id.contentab2);
+        food5_3 = view.findViewById(R.id.contentab3);
 
-        for(int i =0;i<4;i++){
-            try{
-                if(mPref.getString("check" + String.valueOf(i), "").contains("0"))
-                    check[i] =  false;
-                else if(mPref.getString("check" + String.valueOf(i), "").contains("1"))
-                    check[i] =  true;
+        for (int i = 0; i < 4; i++) {
+            try {
+                if (mPref.getString("check" + String.valueOf(i), "").contains("0"))
+                    check[i] = false;
+                else if (mPref.getString("check" + String.valueOf(i), "").contains("1"))
+                    check[i] = true;
                 else
-                    check[i] =  true;
-            }catch(Exception e){
-                check[i] =  true;
+                    check[i] = true;
+            } catch (Exception e) {
+                check[i] = true;
                 //Toast.makeText(getActivity(),"sdsd", Toast.LENGTH_LONG).show();
             }
 
-            if(check[i] == true){
-                yeah(i,0,view);
-            }else if(check[i] == false){
-                yeah(i,1,view);
+            if (check[i] == true) {
+                yeah(i, 0, view);
+            } else if (check[i] == false) {
+                yeah(i, 1, view);
             }
 
         }
 
-        CardView button1= (CardView)view.findViewById(R.id.openworld);
-        button1.setOnClickListener(new View.OnClickListener(){
+        CardView button1 = (CardView) view.findViewById(R.id.openworld);
+        button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view2) {
-                if(check[0] == false){
-                    yeah(0,0,view);
-                }else if(check[0] == true){
-                    yeah(0,1,view);
+                if (check[0] == false) {
+                    yeah(0, 0, view);
+                } else if (check[0] == true) {
+                    yeah(0, 1, view);
                 }
 
             }
         });
 
-        CardView button2= (CardView)view.findViewById(R.id.openworld2);
-        button2.setOnClickListener(new View.OnClickListener(){
+        CardView button2 = (CardView) view.findViewById(R.id.openworld2);
+        button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view2) {
-                if(check[1] == false){
-                    yeah(1,0,view);
-                }else if(check[1] == true){
-                    yeah(1,1,view);
+                if (check[1] == false) {
+                    yeah(1, 0, view);
+                } else if (check[1] == true) {
+                    yeah(1, 1, view);
                 }
 
             }
         });
 
-        CardView button3= (CardView)view.findViewById(R.id.openworlda);
-        button3.setOnClickListener(new View.OnClickListener(){
+        CardView button3 = (CardView) view.findViewById(R.id.openworlda);
+        button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view2) {
-                if(check[2] == false){
-                    yeah(2,0,view);
-                }else if(check[2] == true){
-                    yeah(2,1,view);
+                if (check[2] == false) {
+                    yeah(2, 0, view);
+                } else if (check[2] == true) {
+                    yeah(2, 1, view);
                 }
 
 
             }
         });
 
-        CardView button4= (CardView)view.findViewById(R.id.openworldab);
-        button4.setOnClickListener(new View.OnClickListener(){
+        CardView button4 = (CardView) view.findViewById(R.id.openworldab);
+        button4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view2) {
-                if(check[3] == false){
-                    yeah(3,0,view);
-                }else if(check[3] == true){
-                    yeah(3,1,view);
+                if (check[3] == false) {
+                    yeah(3, 0, view);
+                } else if (check[3] == true) {
+                    yeah(3, 1, view);
                 }
 
 
@@ -223,18 +207,18 @@ public class activity_tabs1 extends Fragment {
         return view;
     }
 
-    void yeah(int checkk,int checkk2,View view_temp){
+    void yeah(int checkk, int checkk2, View view_temp) {
         SharedPreferences.Editor mPrefEdit = mPref.edit();
         Boolean tr_fa;
-        String _01,str_temp;
+        String _01, str_temp;
         int visiable;
 
-        if(checkk2 == 0){
+        if (checkk2 == 0) {
             tr_fa = true;
             _01 = "1";
             visiable = View.VISIBLE;
             str_temp = "눌러서 작게보기";
-        }else{
+        } else {
             tr_fa = false;
             _01 = "0";
             visiable = View.GONE;
@@ -245,73 +229,65 @@ public class activity_tabs1 extends Fragment {
         mPrefEdit.putString("check" + String.valueOf(checkk), _01);
         mPrefEdit.commit();
 
-        if(checkk == 3){
-            TextView _text = (TextView)view_temp.findViewById(R.id._4text);
+        if (checkk == 3) {
+            TextView _text = (TextView) view_temp.findViewById(R.id._4text);
             _text.setText(str_temp);
             view_temp.findViewById(R.id.contentab).setVisibility(visiable);
             view_temp.findViewById(R.id.contentab2).setVisibility(visiable);
             view_temp.findViewById(R.id.contentab3).setVisibility(visiable);
             view_temp.findViewById(R.id.textab).setVisibility(visiable);
-            //view_temp.findViewById(R.id.line1ab_2).setVisibility(visiable);
             view_temp.findViewById(R.id.textab2).setVisibility(visiable);
-            //view_temp.findViewById(R.id.line1ab_3).setVisibility(visiable);
             view_temp.findViewById(R.id.textab3).setVisibility(visiable);
         }
-        if(checkk == 2){
-            TextView _text = (TextView)view_temp.findViewById(R.id._3text);
+        if (checkk == 2) {
+            TextView _text = (TextView) view_temp.findViewById(R.id._3text);
             _text.setText(str_temp);
             view_temp.findViewById(R.id.contenta).setVisibility(visiable);
             view_temp.findViewById(R.id.contenta2).setVisibility(visiable);
             view_temp.findViewById(R.id.contenta3).setVisibility(visiable);
             view_temp.findViewById(R.id.texta).setVisibility(visiable);
-            //view_temp.findViewById(R.id.line1a_2).setVisibility(visiable);
             view_temp.findViewById(R.id.texta2).setVisibility(visiable);
-            //view_temp.findViewById(R.id.line1a_3).setVisibility(visiable);
             view_temp.findViewById(R.id.texta3).setVisibility(visiable);
         }
-        if(checkk == 1){
-            TextView _text = (TextView)view_temp.findViewById(R.id._2text);
+        if (checkk == 1) {
+            TextView _text = (TextView) view_temp.findViewById(R.id._2text);
             _text.setText(str_temp);
             view_temp.findViewById(R.id.contentq).setVisibility(visiable);
             view_temp.findViewById(R.id.content2q).setVisibility(visiable);
             view_temp.findViewById(R.id.content3q).setVisibility(visiable);
             view_temp.findViewById(R.id.textq).setVisibility(visiable);
-            //view_temp.findViewById(R.id.line1_2q).setVisibility(visiable);
             view_temp.findViewById(R.id.text2q).setVisibility(visiable);
-            //view_temp.findViewById(R.id.line1_3q).setVisibility(visiable);
             view_temp.findViewById(R.id.text3q).setVisibility(visiable);
         }
-        if(checkk == 0){
-            TextView _text = (TextView)view_temp.findViewById(R.id._1text);
+        if (checkk == 0) {
+            TextView _text = (TextView) view_temp.findViewById(R.id._1text);
             _text.setText(str_temp);
             view_temp.findViewById(R.id.content).setVisibility(visiable);
             view_temp.findViewById(R.id.content2).setVisibility(visiable);
             view_temp.findViewById(R.id.content3).setVisibility(visiable);
             view_temp.findViewById(R.id.text).setVisibility(visiable);
-            //view_temp.findViewById(R.id.line1_2).setVisibility(visiable);
             view_temp.findViewById(R.id.text2).setVisibility(visiable);
-            //view_temp.findViewById(R.id.line1_3).setVisibility(visiable);
             view_temp.findViewById(R.id.text3).setVisibility(visiable);
         }
 
         //MainActivity.mViewPager.getAdapter().notifyDataSetChanged();
     }
 
-    void refresh(){
-        parse1 =  mPref.getString("parse1", "");
-        parse2 =  mPref.getString("parse2", "");
-        parse3 =  mPref.getString("parse3", "");
-        parse4 =  mPref.getString("parse4", "");
-        try{
-            getActivity().runOnUiThread(new Runnable(){
+    void refresh() {
+        parse1 = mPref.getString("parse1", "");
+        parse2 = mPref.getString("parse2", "");
+        parse3 = mPref.getString("parse3", "");
+        parse4 = mPref.getString("parse4", "");
+        try {
+            getActivity().runOnUiThread(new Runnable() {
                 @Override
-                public void run(){
-                    try{
+                public void run() {
+                    try {
                         //parse1 = parse1.replace("\n\n", "");
                         parse1 = parse1.replace("\n", "");
                         parse1 = parse1.replace("<br />", "\n");
 
-                        while(parse1.contains("\n\n")){
+                        while (parse1.contains("\n\n")) {
                             parse1 = parse1.replace("\n\n", "\n");
                         }
 
@@ -337,18 +313,18 @@ public class activity_tabs1 extends Fragment {
                         food5_2.setText(_2);
                         food5_3.setText(_3);
 
-                    }catch(Exception e){
+                    } catch (Exception e) {
                         food5.setText("운영없음");
                         food5_2.setText("운영없음");
                         food5_3.setText("운영없음");
                     }
 
-                    try{
+                    try {
                         //parse2 = parse2.replace("\n\n", "");
                         parse2 = parse2.replace("\n", "");
                         parse2 = parse2.replace("<br />", "\n");
 
-                        while(parse2.contains("\n\n")){
+                        while (parse2.contains("\n\n")) {
                             parse2 = parse2.replace("\n\n", "\n");
                         }
 
@@ -373,19 +349,19 @@ public class activity_tabs1 extends Fragment {
                         food3.setText(_2);
                         food3_2.setText(_1);
                         food3_3.setText(_3);
-                    }catch(Exception e){
+                    } catch (Exception e) {
                         food3.setText("운영없음");
                         food3_2.setText("운영없음");
                         food3_3.setText("운영없음");
                     }
 
-                    try{
+                    try {
                         //parse3 = parse3.replace("\n\n", "");
                         parse3 = parse3.replace("-. ", "-");
                         parse3 = parse3.replace("\n", "");
                         parse3 = parse3.replace("<br />", "\n");
 
-                        while(parse3.contains("\n\n")){
+                        while (parse3.contains("\n\n")) {
                             parse3 = parse3.replace("\n\n", "\n");
                         }
 
@@ -412,44 +388,43 @@ public class activity_tabs1 extends Fragment {
                         food1.setText(_1);
                         food1_2.setText(_2);
                         food1_3.setText(_3);
-                    }catch(Exception e){
+                    } catch (Exception e) {
                         food1.setText("운영없음");
                         food1_2.setText("운영없음");
                         food1_3.setText("운영없음");
                     }
 
-                    try{
-                        parse4 = parse4.replace('(','@');
-                        parse4 = parse4.replace(')','#');
+                    try {
+                        parse4 = parse4.replace('(', '@');
+                        parse4 = parse4.replace(')', '#');
                         total = parse4.split("일@" + when_ + "#</th>");
 
-                        total[1] = total[1].replace("@","(");
-                        total[1] = total[1].replace("#",")");
+                        total[1] = total[1].replace("@", "(");
+                        total[1] = total[1].replace("#", ")");
 
-                        total[1] = total[1].replace("\t","");
-                        total[1] = total[1].replace("\n","");
-                        total[1] = total[1].replace("</div>","");
-                        total[1] = total[1].replace("<div>","");
-                        total[1] = total[1].replace(" ","");
-                        total[1] = total[1].replace("<td>","");
-                        total[1] = total[1].replace("B:","\nB:");
+                        total[1] = total[1].replace("\t", "");
+                        total[1] = total[1].replace("\n", "");
+                        total[1] = total[1].replace("</div>", "");
+                        total[1] = total[1].replace("<div>", "");
+                        total[1] = total[1].replace(" ", "");
+                        total[1] = total[1].replace("<td>", "");
+                        total[1] = total[1].replace("B:", "\nB:");
                         _1 = total[1].split("</td>")[0];
                         _2 = total[1].split("</td>")[1];
                         _3 = total[1].split("</td>")[2];
 
 
-
                         food1q.setText(_1);
                         food1_2q.setText(_2);
                         food1_3q.setText(_3);
-                    }catch(Exception e){
+                    } catch (Exception e) {
                         food1q.setText("운영없음2");
                         food1_2q.setText("운영없음2");
                         food1_3q.setText("운영없음2");
                     }
                 }
             });
-        }catch(Exception e){
+        } catch (Exception e) {
 
         }
     }
