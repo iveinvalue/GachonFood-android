@@ -4,6 +4,6 @@
 
 screenshot
 <br>
-<img src='https://github.com/jungh0/GachonFood-android/blob/master/resource/new/1.png' width='200px'/>
-<img src='https://github.com/jungh0/GachonFood-android/blob/master/resource/new/2.png' width='200px'/>
-<img src='https://github.com/jungh0/GachonFood-android/blob/master/resource/new/3.png' width='200px'/>
+<img src='https://github.com/jungh0/GachonFood-android/blob/master/resource/new2/1.png' width='200px'/>
+<img src='https://github.com/jungh0/GachonFood-android/blob/master/resource/new2/2.png' width='200px'/>
+<img src='https://github.com/jungh0/GachonFood-android/blob/master/resource/new2/3.png' width='200px'/>
