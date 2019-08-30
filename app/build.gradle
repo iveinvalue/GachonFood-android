@@ -7,8 +7,8 @@ android {
         applicationId "com.jungcode.gachonfood.gachonfood"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 12
-        versionName '2.0.8'
+        versionCode 13
+        versionName '2.0.9'
         multiDexEnabled true
     }
     buildTypes {
