@@ -20,8 +20,11 @@ import android.widget.TextView;
 
 import com.baoyz.widget.PullRefreshLayout;
 
+import static com.jungcode.gachonfood.gachonfood.MainActivity.dark;
+
 @SuppressLint("ValidFragment")
 public class activity_tabs extends Fragment {
+
     Context mContext;
     String parse1, parse2, parse3, parse4;
     String[] first, first2, total, total2;
@@ -35,6 +38,14 @@ public class activity_tabs extends Fragment {
     public activity_tabs(Context context, String when) {
         mContext = context;
         when_ = when;
+    }
+
+    public String clean(String t){
+        String tmp = t.trim();
+        if(tmp.equals("")){
+            tmp = "운영없음";
+        }
+        return tmp;
     }
 
     @Override
@@ -72,7 +83,12 @@ public class activity_tabs extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.activity_tabs, null);
+        final View view;
+        if(dark){
+            view = inflater.inflate(R.layout.activity_tabs_dark, null);
+        }else{
+            view = inflater.inflate(R.layout.activity_tabs, null);
+        }
 
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -306,9 +322,9 @@ public class activity_tabs extends Fragment {
                         first2 = first[3].split("</td>");
                         _3 = first2[0];
 
-                        _1 = _1.trim();
-                        _2 = _2.trim();
-                        _3 = _3.trim();
+                        _1 = clean(_1);
+                        _2 = clean(_2);
+                        _3 = clean(_3);
                         food5.setText(_1);
                         food5_2.setText(_2);
                         food5_3.setText(_3);
@@ -343,9 +359,9 @@ public class activity_tabs extends Fragment {
                         first2 = first[3].split("</td>");
                         _3 = first2[0];
 
-                        _1 = _1.trim();
-                        _2 = _2.trim();
-                        _3 = _3.trim();
+                        _1 = clean(_1);
+                        _2 = clean(_2);
+                        _3 = clean(_3);
                         food3.setText(_2);
                         food3_2.setText(_1);
                         food3_3.setText(_3);
@@ -382,9 +398,9 @@ public class activity_tabs extends Fragment {
                         first2 = first[3].split("</td>");
                         _3 = first2[0];
 
-                        _1 = _1.trim();
-                        _2 = _2.trim();
-                        _3 = _3.trim();
+                        _1 = clean(_1);
+                        _2 = clean(_2);
+                        _3 = clean(_3);
                         food1.setText(_1);
                         food1_2.setText(_2);
                         food1_3.setText(_3);
@@ -413,7 +429,9 @@ public class activity_tabs extends Fragment {
                         _2 = total[1].split("</td>")[1];
                         _3 = total[1].split("</td>")[2];
 
-
+                        _1 = clean(_1);
+                        _2 = clean(_2);
+                        _3 = clean(_3);
                         food1q.setText(_1);
                         food1_2q.setText(_2);
                         food1_3q.setText(_3);

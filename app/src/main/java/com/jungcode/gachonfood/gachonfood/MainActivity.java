@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -28,8 +29,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -40,8 +44,9 @@ import io.github.yavski.fabspeeddial.FabSpeedDial;
 import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
+    static Boolean dark = false;
     String parse, parse2, parse3, parse4;
     String[] str = {"월", "화", "수", "목", "금", "토", "일"};
 
@@ -62,6 +67,24 @@ public class MainActivity extends AppCompatActivity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
+
+        Switch actionBarSwitch = new Switch(this);
+
+        SharedPreferences mPref = getSharedPreferences("mPref", 0);
+        dark = mPref.getBoolean("dark", false);
+        if(dark){
+            actionBarSwitch.setChecked(true);
+        }else{
+            actionBarSwitch.setChecked(false);
+        }
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM, ActionBar.DISPLAY_SHOW_CUSTOM);
+        actionBar.setCustomView(actionBarSwitch, new ActionBar.LayoutParams(
+                ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT,
+                Gravity.CENTER_VERTICAL | Gravity.END));
+
+        actionBarSwitch.setOnCheckedChangeListener(this);
 
         FabSpeedDial fabSpeedDial = findViewById(R.id.fabb);
         fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
@@ -94,19 +117,22 @@ public class MainActivity extends AppCompatActivity {
                             .input("내용", "", new MaterialDialog.InputCallback() {
                                 @Override
                                 public void onInput(final MaterialDialog dialog, CharSequence input) {
-                                    final String temp = "https://api.telegram.org/bot439468143:AAE5Kk8kJfTPD3p4EQTjmG8FojGg5oMS7EQ/sendMessage?chat_id=128419855&text=(Gachon_Food)%20Ver_" + BuildConfig.VERSION_NAME + "_" + input.toString();
-                                    new Thread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            posthttp(temp);
-                                            mHandler.post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    Toasty.success(getApplicationContext(), "전송 성공!", Toast.LENGTH_SHORT, true).show();
-                                                }
-                                            });
-                                        }
-                                    }).start();
+                                    if (!input.toString().equals("")) {
+                                        final String msg = "Ver_" + BuildConfig.VERSION_NAME + "_" + input.toString();
+                                        final String temp = "http://wiffy.io/gachon/food/report.php?content=" + msg;
+                                        new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                posthttp(temp);
+                                                mHandler.post(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Toasty.success(getApplicationContext(), "전송 성공!", Toast.LENGTH_SHORT, true).show();
+                                                    }
+                                                });
+                                            }
+                                        }).start();
+                                    }
                                     dialog.dismiss();
                                 }
                             }).show();
@@ -132,7 +158,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
 
         }
-
 
         if (isNetworkAvailable(this)) {
             new Thread(new Runnable() {
@@ -184,6 +209,34 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        SharedPreferences mPref = getSharedPreferences("mPref", 0);
+        SharedPreferences.Editor mPrefEdit = mPref.edit();
+        if(isChecked){
+            dark = true;
+            mPrefEdit.putBoolean("dark", true);
+        }else{
+            dark = false;
+            mPrefEdit.putBoolean("dark", false);
+        }
+        mPrefEdit.commit();
+        new Handler().postDelayed(new Runnable() {// 1 초 후에 실행
+            @Override
+            public void run() {
+                restart();
+            }
+        }, 300);
+    }
+
+    public void restart(){
+        Intent i = getBaseContext().getPackageManager().
+                getLaunchIntentForPackage(getBaseContext().getPackageName());
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -266,5 +319,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return "";
     }
+
 
 }

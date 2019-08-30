@@ -3,7 +3,7 @@
     android:id="@+id/refresh"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="#1A121F30">
+    android:background="#202429">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -26,12 +26,12 @@
                 android:layout_marginRight="9dp"
                 android:layout_marginBottom="5dp"
                 card_view:cardCornerRadius="5dp"
-                card_view:cardElevation="3dp">
+                card_view:cardElevation="5dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#ffffff"
+                    android:background="#292D31"
                     android:padding="23dp">
 
                     <TextView
@@ -39,7 +39,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="비전타워"
-                        android:textColor="#ff646464"
+                        android:textColor="#B4B4B4"
                         android:textSize="22sp"
                         android:textStyle="bold" />
 
@@ -71,7 +71,7 @@
                         android:layout_below="@+id/text"
                         android:layout_marginTop="10dp"
                         android:text="로딩중..."
-                        android:textColor="#ff646464"
+                        android:textColor="#B4B4B4"
                         android:textSize="14sp"
                         android:visibility="visible" />
 
@@ -81,7 +81,7 @@
                         android:layout_height="0.3dp"
                         android:layout_below="@+id/content"
                         android:layout_marginTop="17dp"
-                        android:background="#ffffff"
+                        android:background="#292D31"
                         android:visibility="gone" />
 
                     <TextView
@@ -103,7 +103,7 @@
                         android:layout_below="@+id/text2"
                         android:layout_marginTop="10dp"
                         android:text="로딩중..."
-                        android:textColor="#ff646464"
+                        android:textColor="#B4B4B4"
                         android:textSize="14sp"
                         android:visibility="visible" />
 
@@ -135,7 +135,7 @@
                         android:layout_below="@+id/text3"
                         android:layout_marginTop="10dp"
                         android:text="로딩중..."
-                        android:textColor="#ff646464"
+                        android:textColor="#B4B4B4"
                         android:textSize="14sp"
                         android:visibility="visible" />
 
@@ -164,13 +164,13 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="9dp"
                 android:layout_marginBottom="5dp"
-                card_view:cardElevation="3dp"
+                card_view:cardElevation="5dp"
                 card_view:cardCornerRadius="5dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#ffffff"
+                    android:background="#292D31"
                     android:padding="23dp">
 
                     <TextView
@@ -178,7 +178,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="기숙사"
-                        android:textColor="#ff646464"
+                        android:textColor="#B4B4B4"
                         android:textSize="22sp"
                         android:textStyle="bold" />
 
@@ -209,7 +209,7 @@
                         android:layout_below="@+id/textq"
                         android:layout_marginTop="10dp"
                         android:text="로딩중..."
-                        android:textColor="#ff646464"
+                        android:textColor="#B4B4B4"
                         android:textSize="14sp" />
 
                     <View
@@ -239,7 +239,7 @@
                         android:layout_below="@+id/text2q"
                         android:layout_marginTop="10dp"
                         android:text="로딩중..."
-                        android:textColor="#ff646464"
+                        android:textColor="#B4B4B4"
                         android:textSize="14sp" />
 
                     <View
@@ -269,7 +269,7 @@
                         android:layout_below="@+id/text3q"
                         android:layout_marginTop="10dp"
                         android:text="로딩중..."
-                        android:textColor="#ff646464"
+                        android:textColor="#B4B4B4"
                         android:textSize="14sp" />
 
                     <TextView
@@ -298,13 +298,13 @@
                 android:layout_marginRight="9dp"
                 android:layout_marginBottom="5dp"
                 android:background="#000000"
-                card_view:cardElevation="3dp"
+                card_view:cardElevation="5dp"
                 card_view:cardCornerRadius="5dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#ffffff"
+                    android:background="#292D31"
                     android:padding="23dp">
 
                     <TextView
@@ -312,7 +312,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="아름관"
-                        android:textColor="#ff646464"
+                        android:textColor="#B4B4B4"
                         android:textSize="22sp"
                         android:textStyle="bold" />
 
@@ -343,7 +343,7 @@
                         android:layout_below="@+id/texta"
                         android:layout_marginTop="10dp"
                         android:text="로딩중..."
-                        android:textColor="#ff646464"
+                        android:textColor="#B4B4B4"
                         android:textSize="14sp" />
 
                     <View
@@ -373,7 +373,7 @@
                         android:layout_below="@+id/texta2"
                         android:layout_marginTop="10dp"
                         android:text="로딩중..."
-                        android:textColor="#ff646464"
+                        android:textColor="#B4B4B4"
                         android:textSize="14sp" />
 
                     <View
@@ -403,7 +403,7 @@
                         android:layout_below="@+id/texta3"
                         android:layout_marginTop="10dp"
                         android:text="로딩중..."
-                        android:textColor="#ff646464"
+                        android:textColor="#B4B4B4"
                         android:textSize="14sp" />
 
                     <TextView
@@ -430,14 +430,14 @@
                 android:layout_marginLeft="9dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="9dp"
-                android:layout_marginBottom="10dp"
-                card_view:cardElevation="3dp"
+                android:layout_marginBottom="5dp"
+                card_view:cardElevation="5dp"
                 card_view:cardCornerRadius="5dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#ffffff"
+                    android:background="#292D31"
                     android:padding="23dp">
 
                     <TextView
@@ -445,7 +445,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="창조관"
-                        android:textColor="#ff646464"
+                        android:textColor="#B4B4B4"
                         android:textSize="22sp"
                         android:textStyle="bold" />
 
@@ -476,7 +476,7 @@
                         android:layout_below="@+id/textab"
                         android:layout_marginTop="10dp"
                         android:text="로딩중..."
-                        android:textColor="#ff646464"
+                        android:textColor="#B4B4B4"
                         android:textSize="14sp" />
 
                     <View
@@ -506,7 +506,7 @@
                         android:layout_below="@+id/textab2"
                         android:layout_marginTop="10dp"
                         android:text="로딩중..."
-                        android:textColor="#ff646464"
+                        android:textColor="#B4B4B4"
                         android:textSize="14sp" />
 
                     <View
@@ -536,7 +536,7 @@
                         android:layout_below="@+id/textab3"
                         android:layout_marginTop="10dp"
                         android:text="로딩중..."
-                        android:textColor="#ff646464"
+                        android:textColor="#B4B4B4"
                         android:textSize="14sp" />
 
                     <TextView
